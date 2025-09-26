@@ -1,0 +1,17 @@
+server:
+  port: 7978
+
+spring:
+  application:
+    name: PAYMENT-SERVICE   # must match Gateway route
+  boot:
+    admin:
+      client:
+        url: http://localhost:1111/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
