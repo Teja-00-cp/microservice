@@ -130,7 +130,7 @@
         // Define the full list of 30-minute time slots from 9:00 AM to 6:00 PM
        $.ajax({
                             type: 'GET',
-                            url: `http://localhost:8080/pat/getname/${username}`,
+                            url: `http://localhost:8080/order/pat/getname/${username}`,
                             // headers: {
                             //     'Authorization': 'Bearer ' + token // Use the 'token' variable here
                             // },
@@ -243,7 +243,7 @@
         function fetchDoctors() {
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/getalldoc',
+                url: 'http://localhost:8080/order/getalldoc',
                 dataType: 'json',
             //     headers: {
             //     'Authorization': 'Bearer ' + token
@@ -324,12 +324,11 @@
         }
 
             const formData = {
-                patient: {
+                
                     patientId: parseInt($('#patientId').val())
-                },
-                doctor: {
+                ,
                     doctorId: parseInt($('#doctorId').val())
-                },
+                ,
                 appointmentDate: $('#appointmentDate').val(),
                 timeSlot: $('#timeSlot').val(),
                 status: 'CONFIRMED'
@@ -361,7 +360,7 @@
                         $('#appointmentForm')[0].reset();
                         // Re-fetch time slots to update the list after a successful booking
                         fetchBookedSlots();
-                    window.location.href = `Patient-DashBoard.html`;
+                    // window.location.href = `Patient-DashBoard.html`;
                     }, 3000);
                 },
                 error: function(xhr, status, error) {
@@ -393,7 +392,7 @@
                 // Perform the AJAX POST request
                 if(doctorFee[doctorSpe.get(Number(doctorId))]){
                 $.ajax({
-                    url: 'http://localhost:8080/api/billing/pay/add',
+                    url: 'http://localhost:8080/order/api/billing/pay/add',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(billData),

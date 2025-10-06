@@ -1,22 +1,32 @@
 package moc.tem.model;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 public class User {
 	
 	private long userId;
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+	private String username;
+	private String password;
+	
+	@Enumerated(EnumType.STRING)
+	private Role role;
+	
+	public enum Role{
+		ADMIN, PATIENT, DOCTOR;
 	}
 
+    // Constructors
+	public User() {}
+
 	public User(long userId, String username, String password, Role role) {
-		super();
 		this.userId = userId;
 		this.username = username;
 		this.password = password;
 		this.role = role;
 	}
 
+    // Getters and Setters
 	public long getUserId() {
 		return userId;
 	}
@@ -48,16 +58,9 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	private String username;
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	private String password;
-	
-	private Role role;
-	
-	public enum Role{
-		ADMIN,PATIENT,DOCTOR;
+    
+    @Override
+	public String toString() {
+		return "User [userId=" + userId + ", username=" + username + ", role=" + role + "]";
 	}
 }

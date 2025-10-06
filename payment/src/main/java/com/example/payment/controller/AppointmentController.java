@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.example.payment.Service.AppointmentService;
 
 @RestController
 @RequestMapping("/appointment")
+@EnableDiscoveryClient
 public class AppointmentController {
 
 	@Autowired
@@ -49,6 +51,10 @@ public class AppointmentController {
 	public List<Object[]> allDetails(){
 		return appointmentService.allDetails();
 	}
+	@GetMapping("/giveallappoint")
+	public String allDetailsApp(){
+		return "Return allapp";
+	}
 	@GetMapping("/appt/time/{id}")
 	public Iterable<String> getTime(@PathVariable long id){
 		return appointmentService.getBytime(id);
@@ -67,6 +73,11 @@ public class AppointmentController {
 		return appointmentService.getdoctorappbyToday(userName,appointmentDate);
 		
 	}
+	@GetMapping("/iamapp")
+	public String getTime(){
+		return "I am from appointment service";
+	}
+
 	// @GetMapping("/appt/details/{userName}")
 	// 	public Iterable<Object[]> getdoctorappbyToday(@PathVariable String userName, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 	// 		System.out.println(userName + " " + date);

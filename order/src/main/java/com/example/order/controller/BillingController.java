@@ -9,7 +9,7 @@ import com.example.order.Service.BillingService;
 
 
 @RestController
-@RequestMapping("/api/billing")
+@RequestMapping("/order/api/billing")
 public class BillingController {
 
     @Autowired

@@ -1,50 +1,71 @@
 package com.example.order.Model;
 
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+// Removed all relationship-specific imports as they are not needed for ID-based referencing
+// import com.fasterxml.jackson.annotation.JsonBackReference;
+// import com.fasterxml.jackson.annotation.JsonManagedReference;
+// import jakarta.persistence.CascadeType;
+// import jakarta.persistence.OneToMany;
+// import moc.tem.model.Appointment; // The DTO is not needed in the entity for persistence
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ElementCollection; // To store a collection of simple types (Long)
+
+import java.util.*;
+import jakarta.persistence.CollectionTable;  // To define the table for the IDs
+import jakarta.persistence.JoinColumn;       // To join the ID table back to Doctor
 
 @Entity
 public class Doctor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long doctorId ;
+	
 	@Column(unique = true)
 	private String name;
 	private String specialization; 
 	private String contactNumber ;
 	private String availabilitySchedule;
+
+    // --- REPLACED COMPLEX JPA/DTO RELATIONSHIP WITH A LIST OF FOREIGN KEYS (IDs) ---
+    
+    // Stores the list of Long IDs in a separate table managed by JPA
+    @ElementCollection 
+    @CollectionTable(
+        name = "doctor_appointment_ids", 
+        joinColumns = @JoinColumn(name = "doctor_id")
+    )
+    @Column(name = "appointment_id")
+    private List<Long> appointmentIds;
+
+    // --- End of Microservice ID Mapping ---
+
 	@Override
 	public String toString() {
+		// Cleaned up toString() to reference the ID list, not the full DTO/Entity list
 		return "Doctor [doctorId=" + doctorId + ", name=" + name + ", specialization=" + specialization
 				+ ", contactNumber=" + contactNumber + ", availabilitySchedule=" + availabilitySchedule
-				+ ", appointments=" + appointments + "]";
+				+ ", appointmentIds=" + appointmentIds + "]";
 	}
 
 	
-	public List<Appointment> getAppointments() {
-		return appointments;
+	public List<Long> getAppointmentIds() {
+		return appointmentIds;
 	}
 
 
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
+	public void setAppointmentIds(List<Long> appointmentIds) {
+		this.appointmentIds = appointmentIds;
 	}
-	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL) // Corrected mappedBy
-    @JsonManagedReference("doctor-appointments") // Corrected with a unique name
-    private List<Appointment> appointments;
+    
+    // Removed the old getAppointments/setAppointments which used List<Appointment>
+
 	public Doctor() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	

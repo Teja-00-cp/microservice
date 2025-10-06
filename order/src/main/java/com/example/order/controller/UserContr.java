@@ -17,7 +17,7 @@ import com.example.order.Service.UserSer;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/order/user")
 public class UserContr {
 
 
@@ -58,6 +58,10 @@ public class UserContr {
 	@GetMapping("/forall")
 	public String forAll() {
 		return "All can view";
+	}
+	@GetMapping("/alluservrr")
+	public String forAllUsers() {
+		return "All Users can vieew";
 	}
 	@PostMapping("/authenticate")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {

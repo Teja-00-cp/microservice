@@ -371,7 +371,7 @@
         };
 
         $.ajax({
-            url: 'http://localhost:8080/admin/register_doctor',
+            url: 'http://localhost:8080/order/admin/register_doctor',
             type: 'POST',
             contentType: 'application/json',
          
@@ -386,12 +386,12 @@
             }
         });
     });
-    const doctorsApiUrl = `http://localhost:8080/getCompletedoctor`;
-    const patientsApiUrl = `http://localhost:8080/pat/getallpatients`;
-    const getDoctorByIdUrl = `http://localhost:8080/get/`;
-    const getPatientByIdUrl = `http://localhost:8080/pat/getPatient/`;
-    const updateDoctorApiUrl = `http://localhost:8080/updateDoc/`;
-    const updatePatientApiUrl = `http://localhost:8080/pat/update/`;
+    const doctorsApiUrl = `http://localhost:8080/order/getCompletedoctor`;
+    const patientsApiUrl = `http://localhost:8080/order/pat/getallpatients`;
+    const getDoctorByIdUrl = `http://localhost:8080/order/get/`;
+    const getPatientByIdUrl = `http://localhost:8080/order/pat/getPatient/`;
+    const updateDoctorApiUrl = `http://localhost:8080/order/updateDoc/`;
+    const updatePatientApiUrl = `http://localhost:8080/order/pat/update/`;
 
     // Function to fetch and display doctors
     function loadDoctors() {

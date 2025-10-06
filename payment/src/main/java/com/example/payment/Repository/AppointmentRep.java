@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.payment.Model.Appointment;
+import com.example.payment.Model.Appointment.Status;
 
 @Repository
 public interface AppointmentRep extends JpaRepository<Appointment, Long>{
@@ -37,9 +38,7 @@ List<Object[]> findAppointmentsWithDetailsByDoctorAndDate(@Param("doctorId") Lon
 	    @Query(value = "SELECT a.time_slot FROM appointment a WHERE a.doctor_id = :doctorId", nativeQuery = true)
 	    Iterable<String> findTimeSlotsByDoctorId(@Param("doctorId") Long doctorId);
 //	    List<Appointment> findByDoctorDoctorIdAndAppointmentDate(Long doctorId, LocalDate appointmentDate);
-	    List<Appointment> findByDoctorDoctorIdAndAppointmentDateAndStatus(Long doctorId, LocalDate appointmentDate
-		// , Status status
-		);
+	    List<Appointment> findByDoctorIdAndAppointmentDateAndStatus(Long doctorId, LocalDate appointmentDate, Status status);
 
 
 }

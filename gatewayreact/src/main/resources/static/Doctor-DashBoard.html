@@ -295,7 +295,7 @@
 
         // 1. Fetch Doctor Details
         $.ajax({
-            url: 'http://localhost:8080/getname/' + userName,
+            url: 'http://localhost:8080/order/getname/' + userName,
             type: 'GET',
             dataType: 'json',
             success: function(doctorData) {

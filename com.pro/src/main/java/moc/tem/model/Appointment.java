@@ -1,28 +1,42 @@
 package moc.tem.model;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 public class Appointment {
-
+    
     private long appointmentId;
 
-
-    private Patient patient;
-
-
-    private Doctor doctor;
+//    @JsonBackReference("patient-appointments")
+    private long patientId; // Use ID
+    
+//    @JsonBackReference("doctor-appointments")
+    private long doctorId; // Use ID
 
     private LocalDate appointmentDate;
     private String timeSlot;
     
-    // Corrected to use enum type
-
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public enum Status {
         CONFIRMED, CANCELLED, PENDING;
     }
-    
+
+    // Constructors
+    public Appointment() {}
+
+    public Appointment(long appointmentId, long patientId, long doctorId, LocalDate appointmentDate, String timeSlot, Status status) {
+        this.appointmentId = appointmentId;
+        this.patientId = patientId;
+        this.doctorId = doctorId;
+        this.appointmentDate = appointmentDate;
+        this.timeSlot = timeSlot;
+        this.status = status;
+    }
+
     // Getters and Setters
     public long getAppointmentId() {
         return appointmentId;
@@ -30,17 +44,17 @@ public class Appointment {
     public void setAppointmentId(long appointmentId) {
         this.appointmentId = appointmentId;
     }
-    public Patient getPatient() {
-        return patient;
+    public long getPatientId() {
+        return patientId;
     }
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatientId(long patientId) {
+        this.patientId = patientId;
     }
-    public Doctor getDoctor() {
-        return doctor;
+    public long getDoctorId() {
+        return doctorId;
     }
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setDoctorId(long doctorId) {
+        this.doctorId = doctorId;
     }
     public LocalDate getAppointmentDate() {
         return appointmentDate;
@@ -54,20 +68,16 @@ public class Appointment {
     public void setTimeSlot(String timeSlot) {
         this.timeSlot = timeSlot;
     }
-    
-    // Corrected getStatus method
     public Status getStatus() {
         return status;
     }
-    
-    // Corrected setStatus method
     public void setStatus(Status status) {
         this.status = status;
     }
-    
+
     @Override
     public String toString() {
         return "Appointment [appointmentId=" + appointmentId + ", appointmentDate=" + appointmentDate
-                + ", timeSlot=" + timeSlot + ", status=" + status + "]";
+                + ", timeSlot=" + timeSlot + ", status=" + status + ", patientId=" + patientId + ", doctorId=" + doctorId + "]";
     }
 }

@@ -2,7 +2,8 @@ package com.example.payment.Model;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+// Removed: com.fasterxml.jackson.annotation.JsonBackReference (no complex relationships needed here)
+// Removed: moc.tem.model.Doctor and moc.tem.model.Patient imports (no direct object references)
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,8 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+// Removed: jakarta.persistence.JoinColumn and jakarta.persistence.ManyToOne
 
 @Entity
 public class Appointment {
@@ -19,20 +19,17 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long appointmentId;
 
-    @ManyToOne
-    @JoinColumn(name = "patientId")
-    @JsonBackReference("patient-appointments")
-    private Patient patient;
+    // REPLACED: @ManyToOne Patient patient;
+    // Use a simple ID (long) to store the foreign key.
+    private long patientId;
 
-    @ManyToOne
-    @JoinColumn(name = "doctorId")
-    @JsonBackReference("doctor-appointments")
-    private Doctor doctor;
+    // REPLACED: @ManyToOne Doctor doctor;
+    // Use a simple ID (long) to store the foreign key.
+    private long doctorId;
 
     private LocalDate appointmentDate;
     private String timeSlot;
     
-    // Corrected to use enum type
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -47,18 +44,23 @@ public class Appointment {
     public void setAppointmentId(long appointmentId) {
         this.appointmentId = appointmentId;
     }
-    public Patient getPatient() {
-        return patient;
+    
+    // REVISED Getters and Setters for patientId
+    public long getPatientId() {
+        return patientId;
     }
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatientId(long patientId) {
+        this.patientId = patientId;
     }
-    public Doctor getDoctor() {
-        return doctor;
+
+    // REVISED Getters and Setters for doctorId
+    public long getDoctorId() {
+        return doctorId;
     }
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setDoctorId(long doctorId) {
+        this.doctorId = doctorId;
     }
+
     public LocalDate getAppointmentDate() {
         return appointmentDate;
     }
@@ -72,19 +74,20 @@ public class Appointment {
         this.timeSlot = timeSlot;
     }
     
-    // Corrected getStatus method
     public Status getStatus() {
         return status;
     }
     
-    // Corrected setStatus method
     public void setStatus(Status status) {
         this.status = status;
     }
     
     @Override
     public String toString() {
-        return "Appointment [appointmentId=" + appointmentId + ", appointmentDate=" + appointmentDate
+        return "Appointment [appointmentId=" + appointmentId 
+                + ", patientId=" + patientId 
+                + ", doctorId=" + doctorId 
+                + ", appointmentDate=" + appointmentDate
                 + ", timeSlot=" + timeSlot + ", status=" + status + "]";
     }
 }

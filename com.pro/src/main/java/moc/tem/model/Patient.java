@@ -2,26 +2,40 @@ package moc.tem.model;
 
 import java.time.LocalDate;
 import java.util.List;
-class Patient {
+import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+public class Patient {
 	
-	public List<Appointment> getAppointments() {
-		return appointments;
-	}
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
-	}
-
 	private long patientId ;
-	public Patient() {
-		super();
-	}
-//	@PrePersist
-//	public void generateId() {
-//	    this.patientId = java.util.UUID.randomUUID().toString();
-//	}
+    private String name ;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
+
+	private String gender ;
+    private String contactNumber ;
+    private String address;
+	private String medicalHistory;
+    
+//    @JsonManagedReference("patient-appointments")
     private List<Appointment> appointments;
 
+    // Constructors
+    public Patient() {}
+
+    public Patient(long patientId, String name, LocalDate dateOfBirth, String gender, String contactNumber, String address, String medicalHistory, List<Appointment> appointments) {
+        this.patientId = patientId;
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.contactNumber = contactNumber;
+        this.address = address;
+        this.medicalHistory = medicalHistory;
+        this.appointments = appointments;
+    }
+
+    // Getters and Setters
 	public long getPatientId() {
 		return patientId;
 	}
@@ -52,12 +66,6 @@ class Patient {
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
-	@Override
-	public String toString() {
-		return "Patient [patientId=" + patientId + ", name=" + name + ", dateOfBirth=" + dateOfBirth + ", gender="
-				+ gender + ", contactNumber=" + contactNumber + ", address=" + address + ", medicalHistory="
-				+ medicalHistory + "]";
-	}
 	public String getAddress() {
 		return address;
 	}
@@ -70,14 +78,16 @@ class Patient {
 	public void setMedicalHistory(String medicalHistory) {
 		this.medicalHistory = medicalHistory;
 	}
+    public List<Appointment> getAppointments() {
+		return appointments;
+	}
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
 
-	private String name ;
-
-    private LocalDate dateOfBirth;
-
-//	private Date dateOfBirth ;
-	private String gender ;
-    private String contactNumber ;
-    private String address;
-	private String medicalHistory;
+    @Override
+	public String toString() {
+		return "Patient [patientId=" + patientId + ", name=" + name + ", dateOfBirth=" + dateOfBirth + ", gender="
+				+ gender + ", contactNumber=" + contactNumber + "]";
+	}
 }

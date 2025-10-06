@@ -22,7 +22,7 @@ import com.example.order.Service.PatientService;
 
 //@Controller
 @RestController
-@RequestMapping("/pat")
+@RequestMapping("/order/pat")
 public class PatientController {
 	@Autowired
 	private PatientService  patientService;

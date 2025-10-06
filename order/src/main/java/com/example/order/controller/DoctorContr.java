@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.order.Model.Doctor;
 import com.example.order.Service.DoctorService;
 
 
 @RestController
+@RequestMapping("/order")
 public class DoctorContr {
 	@Autowired
 	private DoctorService doctorService;
@@ -39,6 +41,10 @@ public class DoctorContr {
 	@GetMapping("/get/{id}")
 	public Doctor getallbyId(@PathVariable long id){
 		return doctorService.getallbyId(id);
+	}
+	@GetMapping("/order/getname/mm")
+	public String getallOrdername(){
+		return "I am inside Order sser";
 	}
 	@GetMapping("/getname/{name}")
 	public Doctor getbyName(@PathVariable String name){

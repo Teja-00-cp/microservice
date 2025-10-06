@@ -23,21 +23,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 @EnableDiscoveryClient
 @RequestMapping(value = "/payment")
 public class PaymentApplication {
-	@Autowired
-	private WelcomrFeign welcomrFeign;
+
 
 	
 
-	@GetMapping("/order")
-	public String payment(){
-		String par=welcomrFeign.getWelcomeMsg();
-		System.out.println(par);
-		return par;
-	}
-	@GetMapping("/payment")
-	public String getMethodName() {
-		return new String("iam from payment");
-	}
+//	@GetMapping("/order")
+//	public String payment(){
+//		String par=welcomrFeign.getWelcomeMsg();
+//		System.out.println(par);
+//		return par;
+//	}
+//	@GetMapping("/payment")
+//	public String getMethodName() {
+//		return new String("iam from payment");
+//	}
 	
 	
 	public static void main(String[] args) {

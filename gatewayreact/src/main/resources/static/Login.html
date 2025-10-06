@@ -141,7 +141,7 @@
        // This is the correct way to handle the plain string response
 // coming from your backend's /authenticate endpoint.
 $.ajax({
-    url: 'http://localhost:8080/user/authenticate',
+    url: 'http://localhost:8080/order/user/authenticate',
     type: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(authRequest),

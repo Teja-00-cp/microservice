@@ -320,7 +320,7 @@
             // Function to fetch and display patient details
             function fetchPatientDetails() {
                 $.ajax({
-                    url: `http://localhost:8080/pat/getname/${username}`,
+                    url: `http://localhost:8080/order/pat/getname/${username}`,
                     type: 'GET',
                     // headers: {
                     //     'Authorization': 'Bearer ' + token
@@ -386,7 +386,7 @@
             // This is the new, corrected part. 
             // The AJAX call for bills is now inside the click handler for the "Show My Bills" button.
             $('#showBill').on('click', function() {
-                const apiUrl = `http://localhost:8080/api/billing/generate/${sessionStorage.getItem('patientId')}`;
+                const apiUrl = `http://localhost:8080/order/api/billing/generate/${sessionStorage.getItem('patientId')}`;
                 const billsCard = $('#billsCard');
                 const billsContainer = $("#bills-container");
 

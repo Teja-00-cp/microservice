@@ -1,37 +1,32 @@
 package moc.tem.model;
 
 import java.util.List;
-public class Doctor {
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+public class Doctor {
+	
 	private long doctorId ;
 	private String name;
 	private String specialization; 
 	private String contactNumber ;
 	private String availabilitySchedule;
-	@Override
-	public String toString() {
-		return "Doctor [doctorId=" + doctorId + ", name=" + name + ", specialization=" + specialization
-				+ ", contactNumber=" + contactNumber + ", availabilitySchedule=" + availabilitySchedule
-				+ ", appointments=" + appointments + "]";
-	}
-
 	
-	public List<Appointment> getAppointments() {
-		return appointments;
-	}
-
-
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
-	}
-
+//    @JsonManagedReference("doctor-appointments") 
     private List<Appointment> appointments;
-	public Doctor() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    
+    // Constructors
+    public Doctor() {}
 
-	
+    public Doctor(long doctorId, String name, String specialization, String contactNumber, String availabilitySchedule, List<Appointment> appointments) {
+        this.doctorId = doctorId;
+        this.name = name;
+        this.specialization = specialization;
+        this.contactNumber = contactNumber;
+        this.availabilitySchedule = availabilitySchedule;
+        this.appointments = appointments;
+    }
+
+    // Getters and Setters
 	public long getDoctorId() {
 		return doctorId;
 	}
@@ -62,5 +57,16 @@ public class Doctor {
 	public void setAvailabilitySchedule(String availabilitySchedule) {
 		this.availabilitySchedule = availabilitySchedule;
 	}
-
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+    
+    @Override
+	public String toString() {
+		return "Doctor [doctorId=" + doctorId + ", name=" + name + ", specialization=" + specialization
+				+ ", contactNumber=" + contactNumber + ", availabilitySchedule=" + availabilitySchedule + "]";
+	}
 }

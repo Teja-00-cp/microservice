@@ -19,6 +19,8 @@
     </properties>
     
     <dependencies>
+        
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -81,11 +83,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-        
         <dependency>
-            <groupId>com.pro</groupId>
-            <artifactId>commonmavean</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+        	<groupId>com.pro</groupId>
+        	<artifactId>commonmavean</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

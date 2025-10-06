@@ -2,9 +2,14 @@ package com.example.payment.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "Welcome-Order")
+import moc.tem.model.Doctor;
+
+@FeignClient(name = "WELCOME-ORDER-SERVICE")
 public interface WelcomrFeign {
-    @GetMapping("/order/welcome")
-	public String getWelcomeMsg();
+	@GetMapping("/order/get/{id}")
+    Doctor getDoctorDetails(@PathVariable Long id); 
+	@GetMapping("/order/getname/{name}")
+	public Doctor getbyName(@PathVariable String name);
 }

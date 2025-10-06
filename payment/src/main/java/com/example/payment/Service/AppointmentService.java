@@ -11,13 +11,20 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.payment.Model.Appointment;
+import com.example.payment.Model.Appointment.Status;
+import com.example.payment.Repository.AppointmentRep;
+import com.example.payment.client.WelcomrFeign;
+
+import moc.tem.model.Doctor;
+
 @Service
 public class AppointmentService {
 
 	@Autowired
 	private AppointmentRep appointmentRep;
 	@Autowired
-	private DocRe docRe;
+	private WelcomrFeign feign;
 
 	public void scheduleAppointment(Appointment appointment) {
 		appointment.setStatus(Status.CONFIRMED);
@@ -44,7 +51,7 @@ public class AppointmentService {
 		return appointmentRep.findTimeSlotsByDoctorId(id);
 	}
 	public Iterable<Object[]> getdoctorappbyToday(String userName, LocalDate appointmentDate){
-		 long doctorId = docRe.findByName(userName).getDoctorId();
+		 long doctorId = feign.getbyName(userName).getDoctorId();
 		return appointmentRep.findAppointmentsWithDetailsByDoctorAndDate(doctorId,appointmentDate);
 	}
 	
@@ -53,8 +60,8 @@ public class AppointmentService {
 
     public List<String> getBookedTimeSlots(long doctorId, String appointmentDate) {
         
-        String availability = docRe.findById(doctorId).orElseThrow(() -> new RuntimeException("Doctor not found")).getAvailabilitySchedule();
-        System.out.println(availability);
+        String availability =feign.getDoctorDetails(doctorId).getAvailabilitySchedule();
+        System.out.println(availability+"  "+feign.getDoctorDetails(doctorId));
         String[] parts = availability.split("-");
         LocalTime startTime = LocalTime.parse(parts[0].trim(), TIME_FORMATTER);
         LocalTime endTime = LocalTime.parse(parts[1].trim(), TIME_FORMATTER);
@@ -62,7 +69,7 @@ public class AppointmentService {
         List<String> allSlots = generateTimeSlots(startTime, endTime);
         
         LocalDate date = LocalDate.parse(appointmentDate);
-        List<Appointment> bookedAppointments = appointmentRep.findByDoctorDoctorIdAndAppointmentDateAndStatus(doctorId, date, Status.CONFIRMED);
+        List<Appointment> bookedAppointments = appointmentRep.findByDoctorIdAndAppointmentDateAndStatus(doctorId, date, Status.CONFIRMED);
         
         List<String> bookedSlots = bookedAppointments.stream()
             .map(Appointment::getTimeSlot)
@@ -88,7 +95,7 @@ public class AppointmentService {
     }
 
 	public List<String> getBookedTimeSlotsByName(String doctorName, String appointmentDate) {
-		long doctorId = docRe.findByName(doctorName).getDoctorId();
+		long doctorId = feign.getbyName(doctorName).getDoctorId();
 		return getBookedTimeSlots(doctorId, appointmentDate);
 	}
 }

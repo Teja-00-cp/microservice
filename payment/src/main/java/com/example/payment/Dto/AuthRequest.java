@@ -1,6 +1,6 @@
 package com.example.payment.Dto;
 
-import com.example.hosptiAl.Model.User.Role;
+import moc.tem.model.User.Role;
 
 public class AuthRequest {
 
