@@ -1,0 +1,25 @@
+server:
+  port: 8777
+
+spring:
+  application:
+    name: BILL-SERVICE # This name is used for service discovery
+  boot:
+    admin:
+      client:
+        url: http://localhost:1111/
+
+# Uncomment and enable the Eureka client
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+
+# Expose management endpoints for Spring Boot Admin
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

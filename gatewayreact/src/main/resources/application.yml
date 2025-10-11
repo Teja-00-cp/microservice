@@ -16,9 +16,9 @@ spring:
           #   - StripPrefix=1
 
         - id: greet-service-route
-          uri: lb://GREET-SERVICE
+          uri: lb://BILL-SERVICE
           predicates:
-            - Path=/greet/**
+            - Path=/bill/**
           # filters:
           #   - StripPrefix=1
 

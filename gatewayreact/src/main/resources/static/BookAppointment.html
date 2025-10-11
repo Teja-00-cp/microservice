@@ -392,7 +392,7 @@
                 // Perform the AJAX POST request
                 if(doctorFee[doctorSpe.get(Number(doctorId))]){
                 $.ajax({
-                    url: 'http://localhost:8080/order/api/billing/pay/add',
+                    url: 'http://localhost:8080/bill/api/billing/pay/add',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(billData),
