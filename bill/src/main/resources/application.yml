@@ -23,3 +23,15 @@ management:
     web:
       exposure:
         include: '*'
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      failtra:
+        # registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10 # Number of recent calls to record
+        minimumNumberOfCalls: 5 # Minimum calls before calculating failure rate
+        failureRateThreshold: 50 # If 50% of the last 10 calls fail, the circuit opens
+        waitDurationInOpenState: 10s # How long the circuit stays open
+        permittedNumberOfCallsInHalfOpenState: 3 # Number of test calls allowed in HALF_OPEN state

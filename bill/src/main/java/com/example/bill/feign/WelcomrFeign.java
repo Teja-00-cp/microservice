@@ -15,6 +15,6 @@ public interface WelcomrFeign {
     Doctor getDoctorDetails(@PathVariable Long id); 
 	@GetMapping("/order/getname/{name}")
 	public Doctor getbyName(@PathVariable String name);
-	@GetMapping("/getPatient/{patientId}")
+	@GetMapping("/order/pat/getPatient/{patientId}")
 	public Optional<Patient> getPatientDetails(@PathVariable long patientId);
 }

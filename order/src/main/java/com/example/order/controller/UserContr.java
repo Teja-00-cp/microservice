@@ -15,6 +15,8 @@ import com.example.order.Dto.PatientDao;
 import com.example.order.Model.User;
 import com.example.order.Service.UserSer;
 
+import jakarta.transaction.Transactional;
+
 
 @RestController
 @RequestMapping("/order/user")
@@ -25,11 +27,13 @@ public class UserContr {
 	@Autowired
 	private UserSer userSer;
 
+	@Transactional
 	@PostMapping("/addPatient")
 	public void addUser(@RequestBody PatientDao patientDao){
 		userSer.addPatient(patientDao);
 		
 	}
+	@Transactional
 	@PostMapping("/addDoctor")
 	public void addDoctor(@RequestBody DoctorDao doctorDao){
 		userSer.addDoctor(doctorDao);

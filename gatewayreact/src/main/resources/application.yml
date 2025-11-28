@@ -8,28 +8,98 @@ spring:
   cloud:
     gateway:
       routes:
+        # Route to WELCOME-ORDER-SERVICE
         - id: welcome-service-route
           uri: lb://WELCOME-ORDER-SERVICE
           predicates:
             - Path=/order/**
-          # filters:
-          #   - StripPrefix=1
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: welcomeCircuitBreaker # Unique name for the Circuit Breaker
+                fallbackUri: forward:/gateway-fallback/welcome # Define a fallback URI
 
+        # Route to BILL-SERVICE
         - id: greet-service-route
           uri: lb://BILL-SERVICE
           predicates:
             - Path=/bill/**
-          # filters:
-          #   - StripPrefix=1
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: billCircuitBreaker
+                fallbackUri: forward:/gateway-fallback/bill
 
+        # Route to PAYMENT-SERVICE (used for /appointment in your config)
         - id: payment-service-route
           uri: lb://PAYMENT-SERVICE
           predicates:
             - Path=/appointment/**
-          # filters:
-          #   - StripPrefix=1
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: paymentCircuitBreaker
+                fallbackUri: forward:/gateway-fallback/payment
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      welcomeCircuitBreaker:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15s
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+      billCircuitBreaker:
+        failureRateThreshold: 60
+        waitDurationInOpenState: 10s
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+      paymentCircuitBreaker:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15s
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+
+
+
+
+# server:
+#   port: 8080
+
+# spring:
+#   application:
+#     name: API-GATEWAY
+
+#   cloud:
+#     gateway:
+#       routes:
+#         - id: welcome-service-route
+#           uri: lb://WELCOME-ORDER-SERVICE
+#           predicates:
+#             - Path=/order/**
+#           # filters:
+#           #   - StripPrefix=1
+
+#         - id: greet-service-route
+#           uri: lb://BILL-SERVICE
+#           predicates:
+#             - Path=/bill/**
+#           # filters:
+#           #   - StripPrefix=1
+
+#         - id: payment-service-route
+#           uri: lb://PAYMENT-SERVICE
+#           predicates:
+#             - Path=/appointment/**
+#           # filters:
+#           #   - StripPrefix=1
+
+# eureka:
+#   client:
+#     service-url:
+#       defaultZone: http://localhost:8761/eureka

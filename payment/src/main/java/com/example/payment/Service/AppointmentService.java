@@ -16,11 +16,14 @@ import com.example.payment.Model.Appointment.Status;
 import com.example.payment.Repository.AppointmentRep;
 import com.example.payment.client.WelcomrFeign;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import moc.tem.model.Doctor;
 
 @Service
 public class AppointmentService {
 
+	private static final String WELCOME_SERVICE = "welcomeOrderServiceCircuit"; // Use the configured CB name
 	@Autowired
 	private AppointmentRep appointmentRep;
 	@Autowired
@@ -50,6 +53,8 @@ public class AppointmentService {
 	public Iterable<String> getBytime(long id){
 		return appointmentRep.findTimeSlotsByDoctorId(id);
 	}
+	@CircuitBreaker(name = WELCOME_SERVICE, fallbackMethod = "fallbackGetDoctorAppByToday")
+    @Retry(name = "welcomeOrderServiceRetry")
 	public Iterable<Object[]> getdoctorappbyToday(String userName, LocalDate appointmentDate){
 		 long doctorId = feign.getbyName(userName).getDoctorId();
 		return appointmentRep.findAppointmentsWithDetailsByDoctorAndDate(doctorId,appointmentDate);
@@ -57,9 +62,10 @@ public class AppointmentService {
 	
 	private static final int SLOT_INTERVAL_MINUTES = 30;
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mma",Locale.US);
-
+	@CircuitBreaker(name = WELCOME_SERVICE, fallbackMethod = "fallbackGetDoctorDetails")
+    @Retry(name = "welcomeOrderServiceRetry")
     public List<String> getBookedTimeSlots(long doctorId, String appointmentDate) {
-        
+        System.out.println("Id was: "+doctorId+" date:"+appointmentDate);
         String availability =feign.getDoctorDetails(doctorId).getAvailabilitySchedule();
         System.out.println(availability+"  "+feign.getDoctorDetails(doctorId));
         String[] parts = availability.split("-");
@@ -93,7 +99,8 @@ public class AppointmentService {
         
         return slots;
     }
-
+	@CircuitBreaker(name = WELCOME_SERVICE, fallbackMethod = "fallbackGetBookedTimeSlotsByName")
+    @Retry(name = "welcomeOrderServiceRetry")
 	public List<String> getBookedTimeSlotsByName(String doctorName, String appointmentDate) {
 		long doctorId = feign.getbyName(doctorName).getDoctorId();
 		return getBookedTimeSlots(doctorId, appointmentDate);
