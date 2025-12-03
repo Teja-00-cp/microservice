@@ -143,7 +143,7 @@
                             },
                             error: function(xhr, status, error) {
                                 console.error("Error fetching patient ID:", error);
-                                alert("Login failed: could not retrieve patient details.");
+                                alert("Login failed: could not retrieve patient details.",error);
                             }
                         });
 
@@ -278,7 +278,7 @@
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching doctors:', error);
-                    $('#doctorId').empty().append($('<option>', {
+alert('Error fetching appointment details. Check console for details: ' + JSON.stringify(error));                    $('#doctorId').empty().append($('<option>', {
                         value: '',
                         text: 'Failed to load doctors',
                         disabled: true,
@@ -403,7 +403,7 @@
                         console.log('Server response:', response);
                         
                         // Show a success message to the user
-                        alert('Payment successful! Your transaction has been completed.');
+                        alert(response==="success"?'Payment successful! Your transaction has been completed.':response);
                     },
                     error: function(xhr, status, error) {
                         // Log the error details to the console for debugging

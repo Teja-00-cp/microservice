@@ -291,30 +291,93 @@
                 const appointmentList = $('#appointmentList');
                 appointmentList.empty();
 
+                // if (appointments && appointments.length > 0) {
+                //     appointments.forEach(app => {
+                //         const appointmentItem = $(`
+                //             <li class="list-group-item">
+                //                 <div class="d-flex w-100 justify-content-between">
+                //                     <h5 class="mb-1"><strong>Doctor:</strong> ${app[7]} (${app[8]})</h5>
+                //                     <small class="text-muted"><strong>Status:</strong> ${app[3]}</small>
+                //                 </div>
+                //                 <p class="mb-1"><strong>Patient:</strong> ${app[5]}</p>
+                //                 <p class="mb-1"><strong>Date:</strong> ${app[1]} at ${app[2]}</p>
+                //                 ${app[3] === 'CONFIRMED' ? `<button class="btn btn-danger btn-sm mt-2 cancel-btn" data-appointment-id="${app[0]}">Cancel Appointment</button>` : ''}
+                //             </li>
+                //         `);
+                //         appointmentList.append(appointmentItem);
+                //     });
+                //     $('.cancel-btn').on('click', function() {
+                //         const appointmentId = $(this).data('appointment-id');
+                //         if (confirm('Are you sure you want to cancel this appointment?')) {
+                //             cancelAppointment(appointmentId);
+                //         }
+                //     });
+                // } else {
+                //     appointmentList.append('<li class="list-group-item">No upcoming appointments.</li>');
+                // }
+
+
+
                 if (appointments && appointments.length > 0) {
-                    appointments.forEach(app => {
-                        const appointmentItem = $(`
-                            <li class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1"><strong>Doctor:</strong> ${app[7]} (${app[8]})</h5>
-                                    <small class="text-muted"><strong>Status:</strong> ${app[3]}</small>
-                                </div>
-                                <p class="mb-1"><strong>Patient:</strong> ${app[5]}</p>
-                                <p class="mb-1"><strong>Date:</strong> ${app[1]} at ${app[2]}</p>
-                                ${app[3] === 'CONFIRMED' ? `<button class="btn btn-danger btn-sm mt-2 cancel-btn" data-appointment-id="${app[0]}">Cancel Appointment</button>` : ''}
-                            </li>
-                        `);
-                        appointmentList.append(appointmentItem);
-                    });
-                    $('.cancel-btn').on('click', function() {
+    appointments.forEach(app => {
+        // Data structure reference:
+        // app[0]: ID, app[1]: Date, app[2]: Time, app[3]: Status, app[7]: Doctor, app[8]: Specialty
+
+        // --- 1. Logic to determine the display status based on date ---
+        const appointmentDate = new Date(app[1]);
+        const today = new Date();
+        // Set today to midnight (00:00:00) for a fair day-by-day comparison
+        today.setHours(0, 0, 0, 0);
+
+        let displayStatus = app[3]; // Start with the status from the data (e.g., 'CONFIRMED')
+        let statusClass = 'text-muted'; // Default class for neutral colors
+
+        // Check if the appointment date is strictly in the past
+        if (appointmentDate < today && app[3] === 'CONFIRMED') {
+            displayStatus = 'APPOINTMENT COMPLETED';
+            statusClass = 'text-success'; // Green color for completed
+        } else if (app[3] === 'CONFIRMED') {
+            statusClass = 'text-primary'; // Blue for pending confirmed
+        }
+        
+        // --- 2. Construct the list item using the determined status ---
+        const appointmentItem = $(`
+            <li class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><strong>Doctor:</strong> ${app[7]} (${app[8]})</h5>
+                    <small class="${statusClass}"><strong>Status:</strong> ${displayStatus}</small>
+                </div>
+                <p class="mb-1"><strong>Patient:</strong> ${app[5]}</p>
+                <p class="mb-1"><strong>Date:</strong> ${app[1]} at ${app[2]}</p>
+                
+                ${
+                    // Display Cancel button ONLY if status is CONFIRMED AND the date is NOT in the past
+                    app[3] === 'CONFIRMED' && appointmentDate >= today
+                    ? `<button class="btn btn-danger btn-sm mt-2 cancel-btn" data-appointment-id="${app[0]}">Cancel Appointment</button>` 
+                    : ''
+                }
+            </li>
+        `);
+        
+        // --- 3. Append to the list ---
+        appointmentList.append(appointmentItem);
+    });
+          $('.cancel-btn').on('click', function() {
                         const appointmentId = $(this).data('appointment-id');
                         if (confirm('Are you sure you want to cancel this appointment?')) {
                             cancelAppointment(appointmentId);
                         }
                     });
-                } else {
-                    appointmentList.append('<li class="list-group-item">No upcoming appointments.</li>');
-                }
+} else {
+    // Optional: Show a message if there are no appointments
+    appointmentList.html('<li class="list-group-item">No appointments found.</li>');
+}
+
+
+
+
+
+
             }
 
             // Function to fetch and display patient details
@@ -466,6 +529,7 @@
                     },
                     error: function(error) {
                         console.error('Failed to fetch initial appointments:', error);
+                        alert('Error fetching appointment details. Check console for details: ' + JSON.stringify(error));
                         displayAppointments([]);
                     }
                 });
